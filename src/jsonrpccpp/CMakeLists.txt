@@ -234,10 +234,12 @@ install(FILES ${server_connector_header} DESTINATION include/jsonrpccpp/server/c
 
 if (WIN32 AND NOT HUNTER_ENABLED)
     # On Windows copy manually installed dependencies unless Hunter is used.
-    file(GLOB win32_libs ${CMAKE_SOURCE_DIR}/win32-deps/lib/*.dll)
-    file(COPY ${win32_libs} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-    install(FILES ${win32_libs} DESTINATION bin)
-    install(DIRECTORY ${CMAKE_SOURCE_DIR}/win32-deps/include DESTINATION .)
+    if(EXISTS "${CMAKE_SOURCE_DIR}/win32-deps")
+        file(GLOB win32_libs ${CMAKE_SOURCE_DIR}/win32-deps/lib/*.dll)
+        file(COPY ${win32_libs} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+        install(FILES ${win32_libs} DESTINATION bin)
+        install(DIRECTORY ${CMAKE_SOURCE_DIR}/win32-deps/include DESTINATION .)
+    endif()
 endif ()
 
 install(TARGETS ${ALL_LIBS} EXPORT libjson-rpc-cppTargets
